@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'lambda-dynamodb-localtesting
+
+  Sample SAM Template for lambda-dynamodb-localtesting
+
+  '
+Parameters:
+  TableName:
+    Type: String
+    Default: PersonTable
+Resources:
+  PersonTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName:
+        Ref: TableName
+      AttributeDefinitions:
+      - AttributeName: Id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: Id
+        KeyType: HASH
+  Person:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      Handler: app.lambda_handler
+      CodeUri: Person
+      MemorySize: 128
+      Timeout: 300
+      Policies: AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE:
+            Ref: TableName
+      Events:
+        PutPerson:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
+        GetPerson:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+    Metadata:
+      SamResourceId: Person
+Outputs:
+  PersonApi:
+    Description: API Gateway endpoint URL for Person API
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+  PersonFunction:
+    Description: Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - Person
+      - Arn
