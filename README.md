@@ -1,6 +1,6 @@
 
 The aim of this repository is to provide a local environment to test the integration of your serverless web application before deploying it on the cloudformation stack.
-The template file constains API gateway , lambda and dynamoDB resources. The DynamoDB image is built from aws/dynamodb-local for local testing
+The template file consists API gateway , lambda and dynamoDB resources. The DynamoDB image is built from aws/dynamodb-local for local testing
 
 Kidnly make sure you have an AWS account and have configured the `AWS_KEY_ID` and `AWS_SECRET_KEY` on your CLI
 
